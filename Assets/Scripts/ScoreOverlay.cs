@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 
 public class ScoreOverlay : MonoBehaviour
 {
@@ -52,10 +49,5 @@ public class ScoreOverlay : MonoBehaviour
             }
             EventSystem.current.SetSelectedGameObject(null);
         }
-    }
-
-    public void BackToMainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
     }
 }

@@ -41,26 +41,20 @@ public class Disc : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.name == "LeftNet") {
-            rb.velocity = Vector2.zero;
-            OnGoal.Invoke(PlayerID.Right);
-        } else if (collider.gameObject.name == "RightNet") {
-            rb.velocity = Vector2.zero;
-            OnGoal.Invoke(PlayerID.Left);
+        if (collider.gameObject.GetComponent<Net>() == null) {
+            return;
         }
+        rb.velocity = Vector2.zero;
+        OnGoal.Invoke(transform.localPosition.x > 0 ? PlayerID.Left : PlayerID.Right);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         Vector3 colliderSize = collision.collider.bounds.size;
-        Vector3 collidedTransformPos = collision.transform.position;
-        if (collision.gameObject.name == "LeftPad") {
-            float hitFactor = (transform.position.y - collidedTransformPos.y) / colliderSize.y;
-            movementDirection = new Vector2(1, hitFactor).normalized;
-            rb.velocity = movementSpeed * movementDirection;
-        } else if (collision.gameObject.name == "RightPad") {
-            float hitFactor = (transform.position.y - collidedTransformPos.y) / colliderSize.y;
-            movementDirection = new Vector2(-1, hitFactor).normalized;
+        Vector3 collidedTransformPos = collision.transform.localPosition;
+        if (collision.gameObject.GetComponent<Pad>() != null) {
+            float hitFactor = (transform.localPosition.y - collidedTransformPos.y) / colliderSize.y;
+            movementDirection = new Vector2(- movementDirection.x, hitFactor).normalized;
             rb.velocity = movementSpeed * movementDirection;
         }
     }

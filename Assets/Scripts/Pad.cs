@@ -5,9 +5,11 @@ public class Pad : MonoBehaviour
 {
     public float movementSpeed = 10f;
 
+    private Rigidbody2D rb;
+    private AudioSource audioSource;
+
     private PlayerID playerID;
     private bool gameIsRunning = false;
-    private Rigidbody2D rb;
     private IInputBehaviour inputBehaviour;
 
     public void OnMatchStateChanged(MatchStateTransition transition)
@@ -21,6 +23,7 @@ public class Pad : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
         playerID = gameObject.name.StartsWith("Left") ? PlayerID.Left : PlayerID.Right;
     }
 
@@ -34,6 +37,14 @@ public class Pad : MonoBehaviour
         rb.velocity = gameIsRunning 
             ? new Vector2(0, movementSpeed * inputBehaviour.GetMovementInput(transform.localPosition)) 
             : Vector2.zero;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<Disc>() == null) {
+            return;
+        }
+        audioSource.Play();
     }
 
     IInputBehaviour CreateInputBehaviour()

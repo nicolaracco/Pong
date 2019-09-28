@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MatchFSM : MonoBehaviour
 {
@@ -27,6 +28,11 @@ public class MatchFSM : MonoBehaviour
             return (LeftScore >= pointsToWin && RightScore < LeftScore - 1) ||
                    (RightScore >= pointsToWin && LeftScore < RightScore - 1);
         }
+    }
+
+    public void BackToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void OnGoalMade(PlayerID playerId)
@@ -61,7 +67,7 @@ public class MatchFSM : MonoBehaviour
             ) {
             MoveStateTo(MatchState.Running);
         } else if (state != MatchState.Stopped && state != MatchState.Ended && Input.GetButtonDown("Cancel")) {
-            MoveStateTo(MatchState.Stopped);
+            BackToMainMenu();
         }
     }
 
