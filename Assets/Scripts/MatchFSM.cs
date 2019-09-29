@@ -30,6 +30,19 @@ public class MatchFSM : MonoBehaviour
         }
     }
 
+    private bool IsMatchPoint
+    {
+        get
+        {
+            if (!PointsToWin.HasValue || IsMatchOver) {
+                return false;
+            }
+            int pointsToWin = PointsToWin.Value;
+            return (LeftScore >= pointsToWin - 1 && RightScore < LeftScore) ||
+                    (RightScore >= pointsToWin - 1 && LeftScore < RightScore);
+        }
+    }
+
     public void BackToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
@@ -54,7 +67,7 @@ public class MatchFSM : MonoBehaviour
     {
         PointsToWin = GameSettings.PointsToWin; // copy the setting because it can be changed while a "demo" is running
         OnMatchStateChanged.Invoke(
-            new MatchStateTransition(MatchState.WaitingToStart, MatchState.WaitingToStart, 0, 0, null)
+            new MatchStateTransition(MatchState.WaitingToStart, MatchState.WaitingToStart, 0, 0, IsMatchPoint, null)
         );
     }
 
@@ -77,7 +90,7 @@ public class MatchFSM : MonoBehaviour
         state = newState;
         timeSpentInCurrentState = 0;
         OnMatchStateChanged.Invoke(
-            new MatchStateTransition(oldState, newState, LeftScore, RightScore, lastGoalPlayerID)
+            new MatchStateTransition(oldState, newState, LeftScore, RightScore, IsMatchPoint, lastGoalPlayerID)
         );
     }
 }

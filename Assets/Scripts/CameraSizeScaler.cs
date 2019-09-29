@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// [ExecuteAlways]
 public class CameraSizeScaler : MonoBehaviour
 {
-    private float referenceOrtographicRatio = 17.78196f;
+    private float referenceOrtographicRatio = 17.77633f;
+
+    private float currentAspectRatio;
 
     void Start()
     {
