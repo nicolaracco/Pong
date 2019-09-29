@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Disc : MonoBehaviour
 {
     public float movementSpeedOnStart = 2.5f;
     public float movementSpeed = 5f;
-    public GoalEvent OnGoal;    
 
     private Rigidbody2D rb;
 
@@ -18,6 +15,7 @@ public class Disc : MonoBehaviour
     {
         if (transition.newState == MatchState.GoalMade || transition.newState == MatchState.Ended || transition.newState == MatchState.Stopped) {
             transform.localPosition = Vector3.zero;
+            rb.velocity = Vector2.zero;
         } else if (transition.newState == MatchState.Running) {
             if (transition.lastGoalPlayerID.HasValue) {
                 movementDirection = new Vector2(
@@ -37,15 +35,6 @@ public class Disc : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-    }
-
-    void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (collider.gameObject.GetComponent<Net>() == null) {
-            return;
-        }
-        rb.velocity = Vector2.zero;
-        OnGoal.Invoke(transform.localPosition.x > 0 ? PlayerID.Left : PlayerID.Right);
     }
 
     void OnCollisionEnter2D(Collision2D collision)

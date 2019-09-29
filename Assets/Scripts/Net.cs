@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Net : MonoBehaviour
 {
+    public GoalEvent OnGoalEvent;
+
     private AudioSource audioSource;
 
     void Awake()
@@ -17,5 +19,6 @@ public class Net : MonoBehaviour
             return;
         }
         audioSource.Play();
+        OnGoalEvent.Invoke(transform.localPosition.x > 0 ? PlayerID.Left : PlayerID.Right);
     }
 }
