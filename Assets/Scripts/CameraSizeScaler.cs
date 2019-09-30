@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class CameraSizeScaler : MonoBehaviour
 {
-    private float referenceOrtographicRatio = 17.77633f;
-
-    private float currentAspectRatio;
+    private float referenceOrtographicRatio = 19.98674f;
 
     void Start()
     {
-        float currentAspect = (float)Screen.height / (float)Screen.width;
-        Camera.main.orthographicSize = referenceOrtographicRatio * currentAspect;
+        StartCoroutine(UpdateOrthographicSize());
+    }
+
+    IEnumerator UpdateOrthographicSize()
+    {
+        while (true) {
+            float aspectRatio = (float)Screen.height / (float)Screen.width;
+            Camera.main.orthographicSize = referenceOrtographicRatio * aspectRatio;
+            yield return new WaitForSeconds(.1f);
+        }
     }
 }

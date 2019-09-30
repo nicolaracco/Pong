@@ -11,7 +11,7 @@ public class Pad : MonoBehaviour
 
     private PlayerID playerID;
     private bool gameIsRunning = false;
-    private IInputBehaviour inputBehaviour;
+    private InputBehaviourInterface inputBehaviour;
 
     public void OnMatchStateChanged(MatchStateTransition transition)
     {
@@ -49,16 +49,15 @@ public class Pad : MonoBehaviour
         }
         Vector3 colliderSize = selfCollider.bounds.size;
         float hitFactor = (disc.transform.localPosition.y - transform.localPosition.y) / colliderSize.y;
-        Debug.Log(hitFactor);
         disc.MovementDirection = new Vector2(- disc.MovementDirection.x, hitFactor * 2).normalized;
         audioSource.Play();
     }
 
-    IInputBehaviour CreateInputBehaviour()
+    InputBehaviourInterface CreateInputBehaviour()
     {
         if (GameSettings.GetPlayerTypeForPlayerID(playerID) == PlayerType.AI) {
             return new AIInputBehaviour(GameObject.FindObjectOfType<Disc>());
         }
-        return new HumanInputBehaviour(playerID == PlayerID.Left ? "2nd Vertical" : "Vertical");
+        return new HumanInputBehaviour(playerID);
     }
 }

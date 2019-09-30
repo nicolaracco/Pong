@@ -2,27 +2,7 @@ using UnityEngine;
 
 namespace Pong.InputBehaviour
 {
-    public interface IInputBehaviour
-    {
-        float GetMovementInput(Vector2 currentPosition);
-    }
-
-    public class HumanInputBehaviour : IInputBehaviour
-    {
-        private string movementAxisName;
-
-        public HumanInputBehaviour(string movementAxisName)
-        {
-            this.movementAxisName = movementAxisName;
-        }
-
-        public float GetMovementInput(Vector2 currentPosition)
-        {
-            return Input.GetAxisRaw(movementAxisName);
-        }
-    }
-
-    public class AIInputBehaviour : IInputBehaviour
+    public class AIInputBehaviour : InputBehaviourInterface
     {
         private Disc disc;
 
