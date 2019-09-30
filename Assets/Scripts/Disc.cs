@@ -9,7 +9,13 @@ public class Disc : MonoBehaviour
 
     private Vector2 movementDirection;
 
-    public Vector2 MovementDirection { get { return movementDirection; } }
+    public Vector2 MovementDirection { 
+        get { return movementDirection; } 
+        set {
+            movementDirection = value;
+            rb.velocity = movementDirection * movementSpeed;
+        }
+    }
 
     public void OnMatchStateChanged(MatchStateTransition transition)
     {
@@ -35,16 +41,5 @@ public class Disc : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        Vector3 colliderSize = collision.collider.bounds.size;
-        Vector3 collidedTransformPos = collision.transform.localPosition;
-        if (collision.gameObject.GetComponent<Pad>() != null) {
-            float hitFactor = (transform.localPosition.y - collidedTransformPos.y) / colliderSize.y;
-            movementDirection = new Vector2(- movementDirection.x, hitFactor).normalized;
-            rb.velocity = movementSpeed * movementDirection;
-        }
     }
 }

@@ -6,6 +6,7 @@ public class Pad : MonoBehaviour
     public float movementSpeed = 10f;
 
     private Rigidbody2D rb;
+    private Collider2D selfCollider;
     private AudioSource audioSource;
 
     private PlayerID playerID;
@@ -23,6 +24,7 @@ public class Pad : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        selfCollider = GetComponent<Collider2D>();
         audioSource = GetComponent<AudioSource>();
         playerID = gameObject.name.StartsWith("Left") ? PlayerID.Left : PlayerID.Right;
     }
@@ -41,9 +43,14 @@ public class Pad : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.GetComponent<Disc>() == null) {
+        Disc disc = collision.gameObject.GetComponent<Disc>();
+        if (disc == null) {
             return;
         }
+        Vector3 colliderSize = selfCollider.bounds.size;
+        float hitFactor = (disc.transform.localPosition.y - transform.localPosition.y) / colliderSize.y;
+        Debug.Log(hitFactor);
+        disc.MovementDirection = new Vector2(- disc.MovementDirection.x, hitFactor * 2).normalized;
         audioSource.Play();
     }
 

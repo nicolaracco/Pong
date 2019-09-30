@@ -209,7 +209,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.125
+  m_Radius: 0.25
 --- !u!114 &3007758062326366001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,21 +224,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeedOnStart: 15
   movementSpeed: 25
-  OnGoal:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3007758061980410202}
-        m_MethodName: OnGoalMade
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: GoalEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1001 &3473217102813963578
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -747,6 +732,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6812958637907580801, guid: ad971e0cabdf8467487e50c481752690,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6812958637907580805, guid: ad971e0cabdf8467487e50c481752690,
         type: 3}
