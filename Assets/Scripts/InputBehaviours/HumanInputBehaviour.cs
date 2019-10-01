@@ -13,22 +13,14 @@ namespace Pong.InputBehaviour
 
         public float GetMovementInput(Vector2 currentPosition)
         {
-            if (SystemInfo.deviceType == DeviceType.Desktop) {
-                return GetDesktopMovementInput(currentPosition);
-            }
-            return GetHandheldMovementInput(currentPosition);
-        }
-
-        float GetHandheldMovementInput(Vector2 currentPosition)
-        {
-            Vector2? touchPosition = GetHandheldPressedTouchPosition();
+            Vector2? touchPosition = GetPressedTouchPosition();
             if (touchPosition.HasValue) {
                 return Mathf.Clamp(touchPosition.Value.y - currentPosition.y, -1, 1);
             }
-            return 0f;
+            return Input.GetAxisRaw(GetMovementAxisName());
         }
 
-        Vector2? GetHandheldPressedTouchPosition()
+        Vector2? GetPressedTouchPosition()
         {
             foreach (Touch t in Input.touches) {
                 Vector2 position = Camera.main.ScreenToWorldPoint(t.position);
@@ -39,13 +31,8 @@ namespace Pong.InputBehaviour
             }
             return null;
         }
-        
-        public float GetDesktopMovementInput(Vector2 currentPosition)
-        {
-            return Input.GetAxisRaw(GetDesktopMovementAxisName());
-        }
 
-        string GetDesktopMovementAxisName()
+        string GetMovementAxisName()
         {
             if (Screen.width > Screen.height) {
                 return playerId == PlayerID.Left ? "2nd Vertical" : "Vertical";
