@@ -17,7 +17,7 @@ namespace Pong.InputBehaviour
             if (touchPosition.HasValue) {
                 return Mathf.Clamp(touchPosition.Value.y - currentPosition.y, -1, 1);
             }
-            return Input.GetAxisRaw(GetMovementAxisName());
+            return Mathf.Clamp(Input.GetAxisRaw(GetMovementAxisName()), -0.75f, 0.75f);
         }
 
         Vector2? GetPressedTouchPosition()

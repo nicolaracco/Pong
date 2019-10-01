@@ -24,12 +24,12 @@ namespace Pong.InputBehaviour
             } else {
                 distanceToMove = discPosition.y - currentPosition.y;
             }
-            return Mathf.Clamp(distanceToMove, -0.9f, 0.9f);
+            return Mathf.Clamp(distanceToMove, -0.4f, 0.4f);
         }
 
         private bool IsDiscMovingTowardsMe(Vector2 position)
         {
-            return Mathf.Sign(position.x - discPosition.x) == Mathf.Sign(disc.MovementDirection.x);
+            return Mathf.Sign(position.x) == Mathf.Sign(disc.MovementDirection.x);
         }
     }
 }
