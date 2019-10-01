@@ -2,8 +2,10 @@
 
 public class Disc : MonoBehaviour
 {
-    public float movementSpeedOnStart = 2.5f;
-    public float movementSpeed = 5f;
+    private float movementSpeed;
+    private bool increaseSpeedOnBounce;
+
+    private float currentMovementSpeed;
 
     private Rigidbody2D rb;
 
@@ -12,14 +14,20 @@ public class Disc : MonoBehaviour
     public Vector2 MovementDirection { 
         get { return movementDirection; } 
         set {
+            if (increaseSpeedOnBounce) {
+                currentMovementSpeed *= 1.02f;
+            }
             movementDirection = value;
-            rb.velocity = movementDirection * movementSpeed;
+            rb.velocity = movementDirection * currentMovementSpeed;
         }
     }
 
     public void OnMatchStateChanged(MatchStateTransition transition)
     {
-        if (transition.newState == MatchState.GoalMade || transition.newState == MatchState.Ended || transition.newState == MatchState.Stopped) {
+        if (transition.newState == MatchState.GoalMade 
+            || transition.newState == MatchState.Ended 
+            || transition.newState == MatchState.Stopped
+        ) {
             transform.localPosition = Vector3.zero;
             rb.velocity = Vector2.zero;
         } else if (transition.newState == MatchState.Running) {
@@ -34,12 +42,19 @@ public class Disc : MonoBehaviour
                     Random.Range(-1f, 1f)
                 ).normalized;
             }
-            rb.velocity = movementSpeedOnStart * movementDirection;
+            currentMovementSpeed = movementSpeed;
+            rb.velocity = (currentMovementSpeed * 0.75f) * movementDirection;
         }
     }
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    void Start()
+    {
+        movementSpeed = GameSettings.discMovementSpeed;
+        increaseSpeedOnBounce = GameSettings.increaseSpeedOnBounce;
     }
 }

@@ -24,7 +24,7 @@ namespace Pong.InputBehaviour
             } else {
                 distanceToMove = discPosition.y - currentPosition.y;
             }
-            return Mathf.Clamp(distanceToMove, -0.4f, 0.4f);
+            return Mathf.Clamp(distanceToMove, -0.5f, 0.5f);
         }
 
         private bool IsDiscMovingTowardsMe(Vector2 position)
