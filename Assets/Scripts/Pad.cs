@@ -49,7 +49,8 @@ public class Pad : MonoBehaviour
         }
         Vector3 colliderSize = selfCollider.bounds.size;
         float hitFactor = (disc.transform.localPosition.y - transform.localPosition.y) / colliderSize.y;
-        disc.MovementDirection = new Vector2(- disc.MovementDirection.x, hitFactor * 2).normalized;
+        float phi = 0.4f * Mathf.PI * hitFactor;
+        disc.MovementDirection = new Vector2(- Mathf.Sign(disc.MovementDirection.x) * Mathf.Cos(phi), Mathf.Sin(phi)).normalized;
         audioSource.Play();
     }
 
