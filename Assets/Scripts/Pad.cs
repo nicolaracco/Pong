@@ -3,7 +3,7 @@ using Pong.InputBehaviour;
 
 public class Pad : MonoBehaviour
 {
-    public float movementSpeed = 10f;
+    private float movementSpeed = 30f;
 
     private Rigidbody2D rb;
     private Collider2D selfCollider;
