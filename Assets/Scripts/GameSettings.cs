@@ -5,6 +5,7 @@
     public static PlayerType RightPlayerType = PlayerType.AI;
     public static float discMovementSpeed = 15f;
     public static bool increaseSpeedOnBounce = true;
+    public static bool audioEnabled = false;
 
     public static PlayerType GetPlayerTypeForPlayerID(PlayerID playerId)
     {

@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
         GameSettings.LeftPlayerType = PlayerType.Human;
         GameSettings.RightPlayerType = PlayerType.AI;
         GameSettings.PointsToWin = 11;
+        GameSettings.audioEnabled = true;
         SceneManager.LoadScene("Game");
     }
 
@@ -24,6 +25,7 @@ public class MainMenu : MonoBehaviour
         GameSettings.LeftPlayerType = PlayerType.AI;
         GameSettings.RightPlayerType = PlayerType.Human;
         GameSettings.PointsToWin = 11;
+        GameSettings.audioEnabled = true;
         SceneManager.LoadScene("Game");
     }
 
@@ -32,6 +34,7 @@ public class MainMenu : MonoBehaviour
         GameSettings.LeftPlayerType = PlayerType.Human;
         GameSettings.RightPlayerType = PlayerType.Human;
         GameSettings.PointsToWin = 11;
+        GameSettings.audioEnabled = true;
         SceneManager.LoadScene("Game");
     }
 

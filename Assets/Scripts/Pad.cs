@@ -32,6 +32,7 @@ public class Pad : MonoBehaviour
     void Start()
     {
         inputBehaviour = CreateInputBehaviour();
+        audioSource.enabled = GameSettings.audioEnabled;
     }
 
     void FixedUpdate()

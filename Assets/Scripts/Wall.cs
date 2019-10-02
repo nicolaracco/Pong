@@ -11,6 +11,11 @@ public class Wall : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    void Start()
+    {
+        audioSource.enabled = GameSettings.audioEnabled;
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.GetComponent<Disc>() == null) {

@@ -13,6 +13,11 @@ public class Net : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    void Start()
+    {
+        audioSource.enabled = GameSettings.audioEnabled;
+    }
+
     void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.GetComponent<Disc>() == null) {
