@@ -47,10 +47,15 @@ public class Pad : MonoBehaviour
         if (disc == null) {
             return;
         }
-        Vector3 colliderSize = selfCollider.bounds.size;
-        float hitFactor = (disc.transform.localPosition.y - transform.localPosition.y) / colliderSize.y;
-        float phi = 0.35f * Mathf.PI * hitFactor;
-        disc.MovementDirection = new Vector2(- Mathf.Sign(disc.MovementDirection.x) * Mathf.Cos(phi), Mathf.Sin(phi)).normalized;
+        // collider height as it appears in unity inspect
+        Vector2 colliderSize = selfCollider.bounds.size;
+        // collision point in local coordinates
+        Vector2 collisionPoint = transform.InverseTransformPoint(collision.contacts[0].point);
+        // hit factor, ranges in -0.5f,+0.5f
+        float hitFactor = collisionPoint.y / colliderSize.y;
+        // (0.25f * PI = 45 deg) * (2 * hitFactor = [-1,1]) => resulting angle ranges in -45/45
+        float phi = 0.5f * Mathf.PI * hitFactor;
+        disc.MovementDirection = Quaternion.AngleAxis(Mathf.Rad2Deg * phi, Vector3.forward) * transform.right;
         audioSource.Play();
     }
 
