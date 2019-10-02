@@ -2,7 +2,7 @@
 {
     public static int? PointsToWin = 11;
     public static PlayerType LeftPlayerType = PlayerType.AI;
-    public static PlayerType RightPlayerType = PlayerType.Human;
+    public static PlayerType RightPlayerType = PlayerType.AI;
     public static float discMovementSpeed = 15f;
     public static bool increaseSpeedOnBounce = true;
 

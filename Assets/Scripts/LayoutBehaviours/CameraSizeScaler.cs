@@ -6,10 +6,17 @@ namespace Pong.LayoutBehaviours
 {
     public class CameraSizeScaler : MonoBehaviour
     {
-        private float referenceOrthographicRatio = 19.98674f;
+        float referenceOrthographicRatio = 19.98674f;
+        float portraitRotationAngle;
 
         void Start()
         {
+            if (GameSettings.LeftPlayerType == PlayerType.Human
+                && GameSettings.RightPlayerType == PlayerType.AI) {
+                    portraitRotationAngle = 270f;
+            } else {
+                portraitRotationAngle = 90f;
+            }
             StartCoroutine(UpdateOrthographicSize());
         }
 
@@ -21,10 +28,10 @@ namespace Pong.LayoutBehaviours
                 if (Screen.height > Screen.width) {
                     orthographicSize /= 2;
                     if (Camera.main.transform.localRotation.z == 0) {
-                        Camera.main.transform.Rotate(0, 0, 90);
+                        Camera.main.transform.Rotate(0, 0, portraitRotationAngle);
                     }
                 } else if (Camera.main.transform.localRotation.z != 0) {
-                    Camera.main.transform.Rotate(0, 0, -90);
+                    Camera.main.transform.Rotate(0, 0, -portraitRotationAngle);
                 }
                 Camera.main.orthographicSize = orthographicSize;
                 yield return new WaitForSeconds(.1f);

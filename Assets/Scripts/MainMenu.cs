@@ -11,7 +11,15 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    public void NewGameVsAI()
+    public void NewGameHumanVsAI()
+    {
+        GameSettings.LeftPlayerType = PlayerType.Human;
+        GameSettings.RightPlayerType = PlayerType.AI;
+        GameSettings.PointsToWin = 11;
+        SceneManager.LoadScene("Game");
+    }
+
+    public void NewGameAIVsHuman()
     {
         GameSettings.LeftPlayerType = PlayerType.AI;
         GameSettings.RightPlayerType = PlayerType.Human;
@@ -19,7 +27,7 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Game");
     }
 
-    public void NewGameVsHuman()
+    public void NewGameHumanVsHuman()
     {
         GameSettings.LeftPlayerType = PlayerType.Human;
         GameSettings.RightPlayerType = PlayerType.Human;
