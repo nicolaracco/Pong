@@ -21,6 +21,8 @@ public class Wall : MonoBehaviour
         if (collision.gameObject.GetComponent<Disc>() == null) {
             return;
         }
-        audioSource.Play();
+        if (audioSource.isActiveAndEnabled) {
+            audioSource.Play();
+        }
     }
 }

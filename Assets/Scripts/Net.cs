@@ -23,7 +23,9 @@ public class Net : MonoBehaviour
         if (collider.gameObject.GetComponent<Disc>() == null) {
             return;
         }
-        audioSource.Play();
+        if (audioSource.isActiveAndEnabled) {
+            audioSource.Play();
+        }
         OnGoalEvent.Invoke(transform.localPosition.x > 0 ? PlayerID.Left : PlayerID.Right);
     }
 }

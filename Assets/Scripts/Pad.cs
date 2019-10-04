@@ -57,7 +57,9 @@ public class Pad : MonoBehaviour
         // (0.25f * PI = 45 deg) * (2 * hitFactor = [-1,1]) => resulting angle ranges in -45/45
         float phi = 0.5f * Mathf.PI * hitFactor;
         disc.MovementDirection = Quaternion.AngleAxis(Mathf.Rad2Deg * phi, Vector3.forward) * transform.right;
-        audioSource.Play();
+        if (audioSource.isActiveAndEnabled) {
+            audioSource.Play();
+        }
     }
 
     InputBehaviourInterface CreateInputBehaviour()
