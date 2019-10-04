@@ -28,7 +28,7 @@ namespace Pong.LayoutBehaviours
                 } else {
                     SetLandscapeViewArea();
                 }
-                yield return new WaitForSeconds(10.25f);
+                yield return new WaitForSeconds(.25f);
             }
         }
 
