@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
-    private AudioSource audioSource;
+    public bool audioEnabled = false;
+
+    AudioSource audioSource;
+    GameSettings gameSettings;
 
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        gameSettings = GameSettings.Current;
     }
 
     void Start()
     {
-        audioSource.enabled = GameSettings.audioEnabled;
+        if (gameSettings != null) {
+            audioEnabled = gameSettings.audioEnabled;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -21,7 +27,7 @@ public class Wall : MonoBehaviour
         if (collision.gameObject.GetComponent<Disc>() == null) {
             return;
         }
-        if (audioSource.isActiveAndEnabled) {
+        if (audioEnabled) {
             audioSource.Play();
         }
     }

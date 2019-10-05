@@ -2,14 +2,14 @@
 
 public class Disc : MonoBehaviour
 {
-    private float movementSpeed;
-    private bool increaseSpeedOnBounce;
+    public float startMovementSpeed = 15f;
+    public bool increaseSpeedOnBounce = true;
+    public float currentMovementSpeed; // public only for being able to see it in inspector
 
-    private float currentMovementSpeed;
+    Rigidbody2D rb;
+    GameSettings gameSettings;
 
-    private Rigidbody2D rb;
-
-    private Vector2 movementDirection;
+    Vector2 movementDirection;
 
     public Vector2 MovementDirection { 
         get { return movementDirection; } 
@@ -42,7 +42,7 @@ public class Disc : MonoBehaviour
                     Random.Range(-1f, 1f)
                 ).normalized;
             }
-            currentMovementSpeed = movementSpeed;
+            currentMovementSpeed = startMovementSpeed;
             rb.velocity = (currentMovementSpeed * 0.75f) * movementDirection;
         }
     }
@@ -50,11 +50,13 @@ public class Disc : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        gameSettings = GameSettings.Current;
     }
 
     void Start()
     {
-        movementSpeed = GameSettings.discMovementSpeed;
-        increaseSpeedOnBounce = GameSettings.increaseSpeedOnBounce;
+        if (gameSettings != null) {
+            increaseSpeedOnBounce = !gameSettings.classicMode;
+        }
     }
 }

@@ -10,11 +10,14 @@ public class ScoreOverlay : MonoBehaviour
     public string winnerLabel = "WINNER";
     public string loserLabel = "LOSER";
 
+    GameSettings gameSettings;
+
     public void OnMatchStateChanged(MatchStateTransition transition)
     {
         if (transition.newState == MatchState.WaitingToStart) {
-            RightPlayerKeysPlaceholder.SetActive(GameSettings.RightPlayerType == PlayerType.Human);
-            LeftPlayerKeysPlaceholder.SetActive(GameSettings.LeftPlayerType == PlayerType.Human);
+            // gameSettings is null only when the scene is ran directly from unity
+            RightPlayerKeysPlaceholder.SetActive(gameSettings == null || gameSettings.RightPlayerType == PlayerType.Human);
+            LeftPlayerKeysPlaceholder.SetActive(gameSettings == null || gameSettings.LeftPlayerType == PlayerType.Human);
         } else {
             RightPlayerKeysPlaceholder.SetActive(false);
             LeftPlayerKeysPlaceholder.SetActive(false);
@@ -30,5 +33,10 @@ public class ScoreOverlay : MonoBehaviour
             }
             EventSystem.current.SetSelectedGameObject(null);
         }
+    }
+
+    void Awake()
+    {
+        gameSettings = GameSettings.Current;
     }
 }

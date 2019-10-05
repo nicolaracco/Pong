@@ -6,10 +6,7 @@ public class DemoGameLoader : MonoBehaviour
 
     void Start()
     {
-        GameSettings.LeftPlayerType = PlayerType.AI;
-        GameSettings.RightPlayerType = PlayerType.AI;
-        GameSettings.PointsToWin = null;
-        GameSettings.audioEnabled = false;
+        GameSettings.Set(-1, PlayerType.AI, PlayerType.AI, true, false);
         Instantiate(GameAreaPrefab, Vector3.zero, Quaternion.identity);
     }
 }

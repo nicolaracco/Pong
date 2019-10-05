@@ -7,15 +7,21 @@ namespace Pong.LayoutBehaviours
     public class CameraSizeScaler : MonoBehaviour
     {
         float targetAspectRatio = 4f / 3f;
-        float portraitRotationAngle;
+        float portraitRotationAngle = 90f;
+        GameSettings gameSettings;
+
+        void Awake()
+        {
+            gameSettings = GameSettings.Current;
+        }
 
         void Start()
         {
-            if (GameSettings.LeftPlayerType == PlayerType.Human
-                && GameSettings.RightPlayerType == PlayerType.AI) {
-                    portraitRotationAngle = 270f;
-            } else {
-                portraitRotationAngle = 90f;
+            // when left player is human and right one is ai, rotate of 270 deg in portrait so the pad will be placed on bottom
+            if (gameSettings != null && gameSettings.LeftPlayerType == PlayerType.Human 
+                && gameSettings.RightPlayerType == PlayerType.AI
+            ) {
+                portraitRotationAngle = 270f;
             }
             StartCoroutine(UpdateViewArea());
         }

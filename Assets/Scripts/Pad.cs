@@ -3,15 +3,18 @@ using Pong.InputBehaviour;
 
 public class Pad : MonoBehaviour
 {
-    private float movementSpeed = 30f;
+    public float movementSpeed = 30f;
+    public PlayerID playerID;
+    public PlayerType playerType = PlayerType.AI;
+    public bool audioEnabled = false;
 
-    private Rigidbody2D rb;
-    private Collider2D selfCollider;
-    private AudioSource audioSource;
+    Rigidbody2D rb;
+    GameSettings gameSettings;
+    Collider2D selfCollider;
+    AudioSource audioSource;
 
-    private PlayerID playerID;
-    private bool gameIsRunning = false;
-    private InputBehaviourInterface inputBehaviour;
+    bool gameIsRunning = false;
+    InputBehaviourInterface inputBehaviour;
 
     public void OnMatchStateChanged(MatchStateTransition transition)
     {
@@ -24,15 +27,18 @@ public class Pad : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        gameSettings = GameSettings.Current;
         selfCollider = GetComponent<Collider2D>();
         audioSource = GetComponent<AudioSource>();
-        playerID = gameObject.name.StartsWith("Left") ? PlayerID.Left : PlayerID.Right;
     }
 
     void Start()
     {
+        if (gameSettings != null) {
+            playerType = gameSettings.GetPlayerTypeForPlayerID(playerID);
+            audioEnabled = gameSettings.audioEnabled;
+        }
         inputBehaviour = CreateInputBehaviour();
-        audioSource.enabled = GameSettings.audioEnabled;
     }
 
     void FixedUpdate()
@@ -57,14 +63,14 @@ public class Pad : MonoBehaviour
         // (0.25f * PI = 45 deg) * (2 * hitFactor = [-1,1]) => resulting angle ranges in -45/45
         float phi = 0.5f * Mathf.PI * hitFactor;
         disc.MovementDirection = Quaternion.AngleAxis(Mathf.Rad2Deg * phi, Vector3.forward) * transform.right;
-        if (audioSource.isActiveAndEnabled) {
+        if (audioEnabled) {
             audioSource.Play();
         }
     }
 
     InputBehaviourInterface CreateInputBehaviour()
     {
-        if (GameSettings.GetPlayerTypeForPlayerID(playerID) == PlayerType.AI) {
+        if (playerType == PlayerType.AI) {
             return new AIInputBehaviour(GameObject.FindObjectOfType<Disc>());
         }
         return new HumanInputBehaviour(playerID);

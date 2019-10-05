@@ -4,40 +4,39 @@ using UnityEngine.SceneManagement;
 public class MatchFSM : MonoBehaviour
 {
     public int secondsOfPauseAfterGoal = 1;
+    public int pointsToWin = 11;
     public MatchStateChangedEvent OnMatchStateChanged;
     public GameObject SecondPadGameObject;
 
-    private readonly int[] score = new int[] { 0, 0 };
-    private MatchState state = MatchState.WaitingToStart;
-    private float timeSpentInCurrentState = 0;
-    private PlayerID? lastGoalPlayerID = null;
-    private int? PointsToWin;
+    GameSettings gameSettings;
+    readonly int[] score = new int[] { 0, 0 };
+    MatchState state = MatchState.WaitingToStart;
+    float timeSpentInCurrentState = 0;
+    PlayerID? lastGoalPlayerID = null;
 
     public int LeftScore { get { return score[0]; } }
     public int RightScore { get { return score[1]; } }
     public MatchState State { get { return state; } }
 
-    private bool IsMatchOver
+    bool IsMatchOver
     {
         get
         {
-            if (!PointsToWin.HasValue) {
+            if (pointsToWin == -1) {
                 return false;
             }
-            int pointsToWin = PointsToWin.Value;
             return (LeftScore >= pointsToWin && RightScore < LeftScore - 1) ||
                    (RightScore >= pointsToWin && LeftScore < RightScore - 1);
         }
     }
 
-    private bool IsMatchPoint
+    bool IsMatchPoint
     {
         get
         {
-            if (!PointsToWin.HasValue || IsMatchOver) {
+            if (pointsToWin == -1 || IsMatchOver) {
                 return false;
             }
-            int pointsToWin = PointsToWin.Value;
             return (LeftScore >= pointsToWin - 1 && RightScore < LeftScore) ||
                     (RightScore >= pointsToWin - 1 && LeftScore < RightScore);
         }
@@ -63,9 +62,16 @@ public class MatchFSM : MonoBehaviour
         MoveStateTo(MatchState.WaitingToStart);
     }
 
+    void Awake()
+    {
+        gameSettings = GameSettings.Current;
+    }
+
     void Start()
     {
-        PointsToWin = GameSettings.PointsToWin; // copy the setting because it can be changed while a "demo" is running
+        if (gameSettings != null) {
+            pointsToWin = gameSettings.pointsToWin;
+        }
         OnMatchStateChanged.Invoke(
             new MatchStateTransition(MatchState.WaitingToStart, MatchState.WaitingToStart, 0, 0, IsMatchPoint, null)
         );

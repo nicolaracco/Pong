@@ -13,28 +13,19 @@ public class MainMenu : MonoBehaviour
 
     public void NewGameHumanVsAI()
     {
-        GameSettings.LeftPlayerType = PlayerType.Human;
-        GameSettings.RightPlayerType = PlayerType.AI;
-        GameSettings.PointsToWin = 11;
-        GameSettings.audioEnabled = true;
+        GameSettings.Set(11, PlayerType.Human, PlayerType.AI, false, true);
         SceneManager.LoadScene("Game");
     }
 
     public void NewGameAIVsHuman()
     {
-        GameSettings.LeftPlayerType = PlayerType.AI;
-        GameSettings.RightPlayerType = PlayerType.Human;
-        GameSettings.PointsToWin = 11;
-        GameSettings.audioEnabled = true;
+        GameSettings.Set(11, PlayerType.AI, PlayerType.Human, false, true);
         SceneManager.LoadScene("Game");
     }
 
     public void NewGameHumanVsHuman()
     {
-        GameSettings.LeftPlayerType = PlayerType.Human;
-        GameSettings.RightPlayerType = PlayerType.Human;
-        GameSettings.PointsToWin = 11;
-        GameSettings.audioEnabled = true;
+        GameSettings.Set(11, PlayerType.Human, PlayerType.Human, false, true);
         SceneManager.LoadScene("Game");
     }
 

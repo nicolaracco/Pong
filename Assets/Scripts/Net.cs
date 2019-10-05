@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class Net : MonoBehaviour
 {
+    public bool audioEnabled;
     public GoalEvent OnGoalEvent;
 
-    private AudioSource audioSource;
+    AudioSource audioSource;
+    GameSettings gameSettings;
 
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        gameSettings = GameSettings.Current;
     }
 
     void Start()
     {
-        audioSource.enabled = GameSettings.audioEnabled;
+        if (gameSettings != null) {
+            audioEnabled = gameSettings.audioEnabled;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collider)
@@ -23,7 +28,7 @@ public class Net : MonoBehaviour
         if (collider.gameObject.GetComponent<Disc>() == null) {
             return;
         }
-        if (audioSource.isActiveAndEnabled) {
+        if (audioEnabled) {
             audioSource.Play();
         }
         OnGoalEvent.Invoke(transform.localPosition.x > 0 ? PlayerID.Left : PlayerID.Right);
