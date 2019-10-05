@@ -9,16 +9,13 @@ public class Disc : MonoBehaviour
     Rigidbody2D rb;
     GameSettings gameSettings;
 
-    Vector2 movementDirection;
-
     public Vector2 MovementDirection { 
-        get { return movementDirection; } 
+        get { return rb.velocity.normalized; } 
         set {
             if (increaseSpeedOnBounce) {
                 currentMovementSpeed *= 1.02f;
             }
-            movementDirection = value;
-            rb.velocity = movementDirection * currentMovementSpeed;
+            rb.velocity = value * currentMovementSpeed;
         }
     }
 
@@ -31,17 +28,15 @@ public class Disc : MonoBehaviour
             transform.localPosition = Vector3.zero;
             rb.velocity = Vector2.zero;
         } else if (transition.newState == MatchState.Running) {
-            if (transition.lastGoalPlayerID.HasValue) {
-                movementDirection = new Vector2(
+            Vector2 movementDirection = transition.lastGoalPlayerID.HasValue
+                ? new Vector2(
                     transition.lastGoalPlayerID.Value == PlayerID.Left ? 1 : -1,
                     Random.Range(-1f, 1f)
-                ).normalized;
-            } else {
-                movementDirection = new Vector2(
+                  ).normalized
+                : new Vector2(
                     Mathf.Sign(Random.Range(-1, 1)), 
                     Random.Range(-1f, 1f)
                 ).normalized;
-            }
             currentMovementSpeed = startMovementSpeed;
             rb.velocity = (currentMovementSpeed * 0.75f) * movementDirection;
         }
