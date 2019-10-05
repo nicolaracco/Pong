@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   secondsOfPauseAfterGoal: 1
+  pointsToWin: 11
   OnMatchStateChanged:
     m_PersistentCalls:
       m_Calls:
@@ -186,7 +187,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 0.0001
-  m_LinearDrag: 0
+  m_LinearDrag: 0.2
   m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: bad8c92bb9e2c46588864546cd2cc223, type: 2}
@@ -222,6 +223,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64179e2a80dfc48b1b5e023e65e08a19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startMovementSpeed: 15
+  increaseSpeedOnBounce: 1
+  currentMovementSpeed: 0
 --- !u!1001 &3473217102813963578
 PrefabInstance:
   m_ObjectHideFlags: 0

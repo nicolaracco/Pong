@@ -21,24 +21,15 @@ public class Disc : MonoBehaviour
 
     public void OnMatchStateChanged(MatchStateTransition transition)
     {
-        if (transition.newState == MatchState.GoalMade 
-            || transition.newState == MatchState.Ended 
-            || transition.newState == MatchState.Stopped
-        ) {
+        if (IsPauseState(transition.newState)) {
             transform.localPosition = Vector3.zero;
             rb.velocity = Vector2.zero;
         } else if (transition.newState == MatchState.Running) {
             Vector2 movementDirection = transition.lastGoalPlayerID.HasValue
-                ? new Vector2(
-                    transition.lastGoalPlayerID.Value == PlayerID.Left ? 1 : -1,
-                    Random.Range(-1f, 1f)
-                  ).normalized
-                : new Vector2(
-                    Mathf.Sign(Random.Range(-1, 1)), 
-                    Random.Range(-1f, 1f)
-                ).normalized;
+                ? new Vector2(transition.lastGoalPlayerID.Value == PlayerID.Left ? 1 : -1, Random.Range(-1f, 1f))
+                : new Vector2(Mathf.Sign(Random.Range(-1, 1)), Random.Range(-1f, 1f));
             currentMovementSpeed = startMovementSpeed;
-            rb.velocity = (currentMovementSpeed * 0.75f) * movementDirection;
+            rb.velocity = (currentMovementSpeed * 0.75f) * movementDirection.normalized;
         }
     }
 
@@ -53,5 +44,10 @@ public class Disc : MonoBehaviour
         if (gameSettings != null) {
             increaseSpeedOnBounce = !gameSettings.classicMode;
         }
+    }
+
+    bool IsPauseState(MatchState state)
+    {
+        return state == MatchState.GoalMade || state == MatchState.Ended || state == MatchState.Stopped;
     }
 }
