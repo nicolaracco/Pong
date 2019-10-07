@@ -7,6 +7,7 @@ public class Disc : MonoBehaviour
     public float currentMovementSpeed; // public only for being able to see it in inspector
 
     Rigidbody2D rb;
+    CircleCollider2D selfCollider;
     GameSettings gameSettings;
 
     public Vector2 MovementDirection { 
@@ -18,6 +19,8 @@ public class Disc : MonoBehaviour
             rb.velocity = value * currentMovementSpeed;
         }
     }
+    public float Radius { get { return selfCollider.radius; } }
+    public Vector2 Position { get { return transform.position; } }
 
     public void OnMatchStateChanged(MatchStateTransition transition)
     {
@@ -36,6 +39,7 @@ public class Disc : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        selfCollider = GetComponent<CircleCollider2D>();
         gameSettings = GameSettings.Current;
     }
 

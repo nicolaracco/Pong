@@ -44,7 +44,7 @@ public class Pad : MonoBehaviour
     void FixedUpdate()
     {
         rb.velocity = gameIsRunning 
-            ? new Vector2(0, movementSpeed * inputBehaviour.GetMovementInput(transform.localPosition)) 
+            ? new Vector2(0, movementSpeed * inputBehaviour.GetMovementInput(transform.position, movementSpeed)) 
             : Vector2.zero;
     }
 

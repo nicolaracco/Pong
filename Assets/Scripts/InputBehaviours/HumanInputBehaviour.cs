@@ -11,7 +11,7 @@ namespace Pong.InputBehaviour
             this.playerId = playerId;
         }
 
-        public float GetMovementInput(Vector2 currentPosition)
+        public float GetMovementInput(Vector2 currentPosition, float padSpeed)
         {
             Vector2? touchPosition = GetPressedTouchPosition();
             if (touchPosition.HasValue) {
