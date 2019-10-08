@@ -1,21 +1,14 @@
 using UnityEngine;
 
-namespace Pong.InputBehaviour
+namespace Pong.PadBehaviours
 {
-    public class HumanInputBehaviour : InputBehaviourInterface
+    public class HumanPad : AbstractPad
     {
-        PlayerID playerId;
-
-        public HumanInputBehaviour(PlayerID playerId)
-        {
-            this.playerId = playerId;
-        }
-
-        public float GetMovementInput(Vector2 currentPosition, float padSpeed)
+        protected override float GetMovementInput()
         {
             Vector2? touchPosition = GetPressedTouchPosition();
             if (touchPosition.HasValue) {
-                return Mathf.Clamp(touchPosition.Value.y - currentPosition.y, -1, 1);
+                return Mathf.Clamp(touchPosition.Value.y - transform.position.y, -1, 1);
             }
             return Mathf.Clamp(Input.GetAxisRaw(GetMovementAxisName()), -0.75f, 0.75f);
         }
@@ -39,5 +32,5 @@ namespace Pong.InputBehaviour
             }
             return playerId == PlayerID.Left ? "2nd Horizontal" : "Horizontal";
         }
-   }
+    }
 }

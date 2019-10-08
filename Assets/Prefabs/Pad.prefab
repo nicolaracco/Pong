@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 6812958637907580800}
   - component: {fileID: 6812958637907580807}
   - component: {fileID: 6812958637907580806}
-  - component: {fileID: 6812958637907580802}
   - component: {fileID: 6081593100149638806}
+  - component: {fileID: 7865726338594947471}
   m_Layer: 0
   m_Name: Pad
   m_TagString: Untagged
@@ -131,18 +131,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.375, y: 2.5}
   m_EdgeRadius: 0
---- !u!114 &6812958637907580802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6812958637907580805}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10dea1006e9e54749b98d49424a769aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &6081593100149638806
 AudioSource:
   m_ObjectHideFlags: 0
@@ -239,3 +227,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7865726338594947471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6812958637907580805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e27fb6e2aeb654a74a06536211ad85c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerID: 0
+  playerType: 0
