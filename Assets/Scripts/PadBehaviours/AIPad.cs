@@ -1,14 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Pong.AI;
 
 namespace Pong.PadBehaviours
 {
     public class AIPad : AbstractPad
     {
+        public float pathRecalcTime = .2f;
+        public int maxPathNodes = 2;
+
         Disc disc;
         IEnumerator trackPathCoroutine;
-        Vector2? trackedDiscDestinationPoint;
+        TrackedPath? lastTrackedPath;
+        float? targetYPosition;
 
         public override void OnMatchStateChanged(MatchStateTransition transition)
         {
@@ -29,12 +35,10 @@ namespace Pong.PadBehaviours
 
         protected override float GetMovementInput()
         {
-            if (!IsDiscMovingTowardsMe() || trackedDiscDestinationPoint == null) {
+            if (!IsDiscMovingTowardsMe() || !targetYPosition.HasValue) {
                 return 0f;
             }
-            Vector2 endPosition = trackedDiscDestinationPoint.Value;
-            float destinationYPosition = findYCoordinateOnStraightLine(disc.Position, endPosition, transform.position.x);
-            return Mathf.Clamp(destinationYPosition - transform.position.y, -1f, 1f);
+            return Mathf.Clamp(targetYPosition.Value - transform.position.y, -1f, 1f);
         }
 
         bool IsDiscMovingTowardsMe()
@@ -53,41 +57,47 @@ namespace Pong.PadBehaviours
 
         IEnumerator TrackPath()
         {
+            PathTracker pathTracker = new PathTracker();
             while (gameIsRunning) {
-                trackedDiscDestinationPoint = GetDiscDestinationPoint();
-                yield return new WaitForSeconds(.25f);
+                if (IsDiscMovingTowardsMe()) {
+                    TrackedPath? path = pathTracker.TrackPath(disc, maxPathNodes);
+                    if (path.HasValue) {
+                        path.Value.Debug(pathRecalcTime);
+                        // if path end position is not similar to the previous tracked one
+                        if (!path.Value.IsSimilar(lastTrackedPath)) {
+                            lastTrackedPath = path;
+                            targetYPosition = CalculateNeededTargetY(
+                                path.Value.LastBouncePosition, 
+                                path.Value.ApproximatedEndPosition
+                            );
+                        }
+                    } else {
+                        // cannot determine target position
+                        targetYPosition = null;
+                    }
+                }
+                yield return new WaitForSeconds(pathRecalcTime);
             }
         }
 
-        Vector2? GetDiscDestinationPoint()
+        /*
+         * Given the disc start position and end position, this returns the y position where
+         * the pad should place itself to be able to get the disc
+         */
+        float CalculateNeededTargetY(Vector2 start, Vector2 end)
         {
-            int netLayer = LayerMask.NameToLayer("Nets");
-            int collisionMasks = LayerMask.GetMask("Walls", "Nets");
-            Vector2 prevPosition = disc.Position;
-            Vector2 prevMovementDirection = disc.MovementDirection;
-            LinkedList<RaycastHit2D> foundHits = new LinkedList<RaycastHit2D>();
-            RaycastHit2D hit = Physics2D.CircleCast(prevPosition + prevMovementDirection, disc.Radius, prevMovementDirection, Mathf.Infinity, collisionMasks);
-            while (hit.collider != null) {
-                foundHits.AddLast(hit);
-                if (foundHits.Count == 2) {
-                    Debug.DrawLine(prevPosition, hit.point, Color.red, .25f);
-                    return null;
-                } else if (hit.collider.gameObject.layer == netLayer) {
-                    Debug.DrawLine(prevPosition, hit.point, Color.green, .25f);
-                    return hit.point;
-                }
-                Debug.DrawLine(prevPosition, hit.point, Color.yellow, .25f);
-                prevMovementDirection = new Vector2(prevMovementDirection.x, - prevMovementDirection.y);
-                hit = Physics2D.CircleCast(prevPosition + prevMovementDirection, disc.Radius, prevMovementDirection, Mathf.Infinity, collisionMasks);
-            }
-            return null;
+            float neededPadY = FindYCoordinateOnStraightLine(start, end, transform.position.x);
+            Debug.DrawLine(transform.position, new Vector2(transform.position.x, neededPadY), Color.gray, pathRecalcTime);
+            float nearestYBound = neededPadY < transform.position.y ? boundYMin + disc.Radius : boundYMax - disc.Radius;
+            float? oldTargetYPosition = targetYPosition;
+            return transform.position.y + neededPadY - nearestYBound;
         }
 
         /*
          * Using the formula (X - X1) / (X2 - X1) = (Y - Y1) / (Y2 - Y1)
          * Thanks to Roberta, my mathematician sister
          */
-        private float findYCoordinateOnStraightLine(Vector2 start, Vector2 end, float x)
+        float FindYCoordinateOnStraightLine(Vector2 start, Vector2 end, float x)
         {
             return start.y + ((x - start.x) * (end.y - start.y)) / (end.x - start.x);
         }

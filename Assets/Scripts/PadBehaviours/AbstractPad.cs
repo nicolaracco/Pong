@@ -15,6 +15,9 @@ namespace Pong.PadBehaviours
 
         protected bool gameIsRunning = false;
 
+        protected float boundYMin { get { return selfCollider.bounds.min.y; } }
+        protected float boundYMax { get { return selfCollider.bounds.max.y; } }
+
         public virtual void OnMatchStateChanged(MatchStateTransition transition)
         {
             gameIsRunning = transition.newState == MatchState.Running;
