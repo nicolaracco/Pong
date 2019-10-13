@@ -1,39 +1,61 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Pong.AI
 {
-    public class PathTracker
+    public class PathTracker : MonoBehaviour
     {
-        int netLayer;
-        int collisionMasks;
-        
-        public PathTracker()
+        public int maxTraversingDepth = 2;
+        public float pathRecalcTime = .2f;
+
+        public float? neededYToInterceptDisc;
+
+        Disc disc;
+        Coroutine trackPathCoroutine;
+        TrackedPath? lastTrackedPath;
+
+        void Awake()
         {
-            netLayer = LayerMask.NameToLayer("Nets");
-            collisionMasks = LayerMask.GetMask("Walls", "Nets");
+            disc = GameObject.FindObjectOfType<Disc>();
         }
 
-        public TrackedPath? TrackPath(Disc disc, int maxNodes = 2)
+        void Start()
         {
-            Vector2 prevPosition = disc.Position;
-            Vector2 prevMovementDirection = disc.MovementDirection;
-            LinkedList<TrackedPath.Node> nodes = new LinkedList<TrackedPath.Node>();
-            RaycastHit2D hit = Physics2D.CircleCast(prevPosition + prevMovementDirection, disc.Radius, prevMovementDirection, Mathf.Infinity, collisionMasks);
-            while (hit.collider != null) {
-                nodes.AddLast(TrackedPath.Node.BuildFromRaycastHit2D(prevPosition, prevMovementDirection, hit));
-                if (hit.collider.gameObject.layer == netLayer) {
-                    return new TrackedPath(nodes, true);
-                } else if (nodes.Count > maxNodes) {
-                    return new TrackedPath(nodes, false);
-                } 
-                prevPosition = hit.centroid;
-                prevMovementDirection = Vector2.Reflect(prevMovementDirection, hit.normal);
-                hit = Physics2D.CircleCast(prevPosition + prevMovementDirection, disc.Radius, prevMovementDirection, Mathf.Infinity, collisionMasks);
+            trackPathCoroutine = StartCoroutine(TrackPath());
+        }
+
+        void OnDisable()
+        {
+            if (trackPathCoroutine == null)
+                return;
+            StopCoroutine(trackPathCoroutine);
+            trackPathCoroutine = null;
+        }
+
+        IEnumerator TrackPath()
+        {
+            TrackPath pathTracker = new TrackPath();
+            while (true) {
+                if (IsDiscMovingTowardsMe()) {
+                    TrackedPath? path = pathTracker.Execute(disc, maxTraversingDepth);
+                    if (path.HasValue) {
+                        path.Value.Debug(pathRecalcTime);
+                        // if path end position is not similar to the previous tracked one
+                        if (!path.Value.IsSimilar(lastTrackedPath)) {
+                            lastTrackedPath = path;
+                            neededYToInterceptDisc = path.Value.InterceptOnXAxis(transform.position.x);
+                        }
+                    } else
+                        neededYToInterceptDisc = null; // cannot determine target position
+                } else
+                    neededYToInterceptDisc = null; // disc not moving toward disc
+                yield return new WaitForSeconds(pathRecalcTime);
             }
-            return null;
+        }
+
+        bool IsDiscMovingTowardsMe()
+        {
+            return Mathf.Sign(transform.position.x) == Mathf.Sign(disc.MovementDirection.x);
         }
     }
 }

@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 6812958637907580807}
   - component: {fileID: 6812958637907580806}
   - component: {fileID: 6081593100149638806}
-  - component: {fileID: 7865726338594947471}
+  - component: {fileID: 7477683707665802583}
+  - component: {fileID: 3811183320388091963}
   m_Layer: 0
   m_Name: Pad
   m_TagString: Untagged
@@ -96,11 +97,11 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1000000
-  m_LinearDrag: 0
+  m_Mass: 1
+  m_LinearDrag: 12
   m_AngularDrag: 0
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 9495c73a0e2194a3788fbdb480d69606, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -227,7 +228,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &7865726338594947471
+--- !u!114 &7477683707665802583
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -236,8 +237,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 6812958637907580805}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e27fb6e2aeb654a74a06536211ad85c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 48e1b0e67bde6437984f7fe674fe10e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementSpeed: 30
   playerID: 0
   playerType: 0
+  audioEnabled: 0
+--- !u!114 &3811183320388091963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6812958637907580805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27924e409aae1497083c59f198609e94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

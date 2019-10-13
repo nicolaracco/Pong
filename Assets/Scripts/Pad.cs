@@ -1,56 +1,33 @@
 using UnityEngine;
 
-namespace Pong.PadBehaviours
+namespace Pong
 {
-    public abstract class AbstractPad : MonoBehaviour
+    public class Pad : MonoBehaviour
     {
         public float movementSpeed = 30f;
-        public PlayerID playerId;
+        public PlayerID playerID;
+        public PlayerType playerType = PlayerType.AI;
         public bool audioEnabled = false;
 
-        Rigidbody2D rb;
+        protected Rigidbody2D rb;
         GameSettings gameSettings;
-        Collider2D selfCollider;
+        protected Collider2D selfCollider;
         AudioSource audioSource;
 
-        protected bool gameIsRunning = false;
-
-        protected float boundYMin { get { return selfCollider.bounds.min.y; } }
-        protected float boundYMax { get { return selfCollider.bounds.max.y; } }
-
-        public virtual void OnMatchStateChanged(MatchStateTransition transition)
-        {
-            gameIsRunning = transition.newState == MatchState.Running;
-            if (transition.newState == MatchState.GoalMade || transition.newState == MatchState.Ended) {
-                transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
-            }
-        }
-
-        protected abstract float GetMovementInput();
-
-        protected virtual void Awake()
+        void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
             gameSettings = GameSettings.Current;
             selfCollider = GetComponent<Collider2D>();
             audioSource = GetComponent<AudioSource>();
-        }
 
-        protected void Start()
-        {
             if (gameSettings != null) {
                 audioEnabled = gameSettings.audioEnabled;
+                playerType = gameSettings.GetPlayerTypeForPlayerID(playerID);
             }
         }
 
-        protected void FixedUpdate()
-        {
-            rb.velocity = gameIsRunning 
-                ? new Vector2(0, movementSpeed * GetMovementInput()) 
-                : Vector2.zero;
-        }
-
-        protected void OnCollisionEnter2D(Collision2D collision)
+        void OnCollisionEnter2D(Collision2D collision)
         {
             Disc disc = collision.gameObject.GetComponent<Disc>();
             if (disc == null) {

@@ -83,5 +83,22 @@ namespace Pong.AI
             Vector2 otherEndPosition = other.Value.ApproximatedEndPosition;
             return Mathf.Abs(Vector2.Distance(endPosition, otherEndPosition)) < 0.2f;
         }
+
+        /*
+         * Returns the y axis value needed to intercept the disc
+         */
+        public float InterceptOnXAxis(float x)
+        {
+            return FindYCoordinateOnStraightLine(LastBouncePosition, ApproximatedEndPosition, x);
+        }
+
+        /*
+         * Using the formula (X - X1) / (X2 - X1) = (Y - Y1) / (Y2 - Y1)
+         * Thanks to Roberta, my mathematician sister
+         */
+        float FindYCoordinateOnStraightLine(Vector2 start, Vector2 end, float x)
+        {
+            return start.y + ((x - start.x) * (end.y - start.y)) / (end.x - start.x);
+        }
     }
 }
